@@ -1,0 +1,157 @@
+{
+    "seedRoles": [
+        {
+            "name": "Watermelon",
+            "id": "1392297193221656636",
+            "emoji": "🌱"
+        },
+        {
+            "name": "Pumpkin",
+            "id": "1392305064768438363",
+            "emoji": "🥔"
+        },
+        {
+            "name": "Apple",
+            "id": "1392305171526058185",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Bamboo",
+            "id": "1392305201662394521",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Coconut",
+            "id": "1392305228052959333",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Cactus",
+            "id": "1392305293823836210",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Dragon Fruit",
+            "id": "1392305326547796038",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Mango",
+            "id": "1392305363986153513",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Grape",
+            "id": "1392305412530765896",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Mushroom",
+            "id": "1392305435243184168",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Cacao",
+            "id": "1392305462535262250",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Beanstalk",
+            "id": "1392305522644090982",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Ember Lily",
+            "id": "1392305552259813539",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Sugar Apple",
+            "id": "1392305556844187698",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Burning Bud",
+            "id": "1392305624049516657",
+            "cost": "40,000,000",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Giant Pinecone",
+            "id": "1393613770311598204",
+            "cost": "40,000,000",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Elder Strawberry",
+            "id": "1398766117648076873",
+            "cost": "70,000,000",
+            "emoji": "🍅"
+        }
+
+    ],
+    "gearRoles": [
+        {
+            "name": "Advanced Sprinkler",
+            "id": "1393325470828728373",
+            "emoji": "🛠️"
+        },
+        {
+            "name": "Medium Toy",
+            "id": "1400647020431151187",
+            "emoji": "🛠️"
+        },
+        {
+            "name": "Medium Treat",
+            "id": "1400646979335356417",
+            "emoji": "🛠️"
+        },
+        {
+            "name": "Tanning Mirror",
+            "id": "1400646902080471040",
+            "emoji": "🛠️"
+        },
+        {
+            "name": "Godly Sprinkler",
+            "id": "1393325295884439712",
+            "emoji": "🛠️"
+        },
+        {
+            "name": "Master Sprinkler",
+            "id": "1393325344294965358",
+            "emoji": "🛠️"
+        },
+        {
+            "name": "Grandmaster Sprinkler",
+            "id": "1401309830886461490",
+            "emoji": "🛠️"
+        },
+        {
+            "name": "Friendship Pot",
+            "id": "1394043730738282516",
+            "emoji": "🛠️"
+        },
+        {
+            "name": "Levelup Lolipop",
+            "id": "1394038908148387930",
+            "emoji": "🛠️"
+        }
+    ],
+    "eggRoles": [
+        {
+            "name": "Mythical Egg",
+            "id": "1400647627023974564",
+            "emoji": "🥚"
+        },
+        {
+            "name": "Paradise Egg",
+            "id": "1393329220867985488",
+            "emoji": "🥚"
+        },
+        {
+            "name": "Bug Egg",
+            "id": "1393329253222846524",
+            "emoji": "🥚"
+        }
+    ]
+}

@@ -1,0 +1,95 @@
+{
+    "seedRoles": [
+        {
+            "name": "Watermelon",
+            "id": "1392297193221656636",
+            "emoji": "🌱"
+        },
+        {
+            "name": "Pumpkin",
+            "id": "1392305064768438363",
+            "emoji": "🥔"
+        },
+        {
+            "name": "Apple",
+            "id": "1392305171526058185",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Bamboo",
+            "id": "1392305201662394521",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Coconut",
+            "id": "1392305228052959333",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Cactus",
+            "id": "1392305293823836210",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Dragon fruit",
+            "id": "1392305326547796038",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Mango",
+            "id": "1392305363986153513",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Grape",
+            "id": "1392305412530765896",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Mushroom",
+            "id": "1392305435243184168",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Cacao",
+            "id": "1392305462535262250",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Beanstalk",
+            "id": "1392305522644090982",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Ember Lily",
+            "id": "1392305552259813539",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Sugar Apple",
+            "id": "1392305556844187698",
+            "emoji": "🍅"
+        },
+        {
+            "name": "Burning Bud",
+            "id": "1392305624049516657",
+            "cost": "40,000,000",
+            "emoji": "🍅"
+        }
+
+    ],
+    "gearRoles": [
+        {
+            "name": "Common Sprinkler",
+            "id": "1392297221927469056",
+            "emoji": "🛠️"
+        }
+    ],
+    "eggRoles": [
+        {
+            "name": "Common Egg",
+            "id": "1392297260586369034",
+            "emoji": "🥚"
+        }
+    ]
+}

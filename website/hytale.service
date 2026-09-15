@@ -1,0 +1,13 @@
+[Unit]
+Description=Hytale Dedicated Server
+After=network.target
+
+[Service]
+User=kat
+WorkingDirectory=/home/kat/HytaleServer
+ExecStart=/usr/bin/java -Xms8G -Xmx8G -jar HytaleServer.jar --assets Assets.zip
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

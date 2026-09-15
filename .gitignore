@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Logs & diagnostics
+*.log
+logs/
+
+# Env / secrets
+.env
+website/apiKeys.json
+config.json
+secrets/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
