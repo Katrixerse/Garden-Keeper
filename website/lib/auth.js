@@ -17,7 +17,7 @@ function constantTimeEqual(a,b){
 
 function requireApiKey(req,res,next){
   if(API_KEYS.length === 0) return res.status(503).json({ error: 'API keys not configured' });
-  const provided = (req.header('x-api-key') || req.query.api_key || '').trim();
+  const provided = (req.header('x-api-key') || '').trim();
   if(!provided) return res.status(401).json({ error: 'Unauthorized' });
   let matched = null;
   for(const k of API_KEYS){ if(constantTimeEqual(provided, k)){ matched = k; break; } }
