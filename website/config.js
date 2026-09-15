@@ -23,7 +23,8 @@ if (API_KEYS.length === 0) {
 // Internal shared secret for bot -> website stock proxy (deprecated; prefer API_KEYS)
 const KEY_HASHES = new Map();
 API_KEYS.forEach(k => {
-  const id = crypto.createHash('sha256').update(k).digest('hex').slice(0,12);
+  const salt = `api-key-id:${k.length}`;
+  const id = crypto.pbkdf2Sync(k, salt, 310000, 32, 'sha256').toString('hex').slice(0,12);
   KEY_HASHES.set(k, id);
 });
 
