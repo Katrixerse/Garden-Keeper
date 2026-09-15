@@ -72,23 +72,8 @@
   .gk-stock-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
 }
 
-/* Pets */
-.gk-grid{display:grid;gap:1rem}
-.gk-pet-grid{grid-template-columns:1.2fr .8fr}
-.gk-col{display:flex;flex-direction:column;gap:1rem}
-.gk-pet-head .pet-head-inner{display:flex;gap:.85rem;align-items:center}
-.pet-icon{width:48px;height:48px;image-rendering:-webkit-optimize-contrast}
-.pet-title{margin:.1rem 0 .2rem}
-.pet-tags{display:flex;gap:.4rem;align-items:center}
-.badge{display:inline-block;padding:.15rem .4rem;border-radius:6px;background:#1b252b;border:1px solid #24323a;font-size:.7rem;color:#cfe3d9}
-.badge.rarity-common{background:#1c2124;border-color:#2a3338;color:#d0d7db}
-.badge.rarity-uncommon{background:#18241d;border-color:#23392c;color:#a9edc2}
-.badge.rarity-rare{background:#18202a;border-color:#233241;color:#9bc5ff}
-.badge.rarity-legendary{background:#241e16;border-color:#3a2f24;color:#ffd79a}
-.badge.rarity-mythical{background:#221a28;border-color:#3d2d49;color:#e2b2ff}
-.tag{display:inline-block;padding:.15rem .4rem;border-radius:6px;background:#0f171b;border:1px solid #1e2a31;font-size:.7rem;color:#b6c9d2}
-.gk-pre.rich{white-space:normal}
-@media (max-width:900px){ .gk-pet-grid{grid-template-columns:1fr} }
+
+
 
 /* Cleaner form layout */
 .gk-form-grid{display:grid;gap:.8rem .9rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));align-items:center}
@@ -161,13 +146,3 @@
 .gk-hidden{display:none}
 .gk-field-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem}
 .gk-field-head label{margin:0}
-
-/* Desktop alignment: keep fields inline where possible */
-@media (min-width: 900px){
-  /* First grid (Search + Pet) */
-  .gk-card-body > .gk-form-grid:nth-of-type(1){grid-template-columns:2fr 1fr}
-  /* Second grid (Weight + Age + Modifier) */
-  .gk-card-body > .gk-form-grid:nth-of-type(2){grid-template-columns:repeat(3,minmax(200px,1fr))}
-  /* Compare grid: arrange in three columns so items stay inline within the card */
-  #compareGrid.gk-form-grid{grid-template-columns:repeat(3,minmax(200px,1fr))}
-}

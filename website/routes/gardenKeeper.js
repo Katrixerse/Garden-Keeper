@@ -10,16 +10,7 @@ try {
 } catch (e) { console.warn('[dashboard] DB pool not available:', e?.message||e); }
 const { escapeHtml, baseLayout } = require('../util/html');
 const config = require('../config.json');
-// Pet calc modules (website-side CommonJS)
-function safeRequire(p){ try { return require(p); } catch { return null; } }
-const petFiles = [
-  'commonEgg','uncommonEgg','rareEgg','legendaryEgg','mythicalEgg','sproutEgg','nightEgg','oasisEgg','paradiseEgg','zenEgg','gourmetEgg','dinosaurEgg','antiBeeEgg','beeEgg','bugEgg','rainbowExotic','chestsEventsOther','commonSummerEgg','rareSummerEgg','birds_new'
-];
-const petCollections = petFiles.map(n=> safeRequire(`../petCalcHandler/pets/${n}.js`)).filter(Boolean);
-const modifiers = safeRequire('../petCalcHandler/utils/modifiers.js');
-const utils = safeRequire('../petCalcHandler/utils/calculations.js');
-const getModifierDetails = modifiers?.getModifierDetails || (t=>({ value:0, text:'', style:'' }));
-const Utils = utils?.Utils || { isValidWeight:(kg)=>Number.isFinite(kg)&&kg>=0&&kg<=5000, formatTime:(s)=>`${Math.round(s)}s`, formatNumber:(n)=>String(n) };
+
 
 // In-process caches (stock + weather)
 let stockCache = { ts:0, built:null, raw:null };
@@ -127,7 +118,6 @@ function nav(req, active){
   const tabs = [
     { key:'overview', label:'Overview', href:'/garden-keeper' },
     { key:'tracking', label:'Tracking', href:'/garden-keeper/tracking' },
-    { key:'pets', label:'Pets', href:'/garden-keeper/pets' },
     { key:'dashboard', label:'Dashboard', href:'/garden-keeper/dashboard' },
     { key:'status', label:'Status', href:'/garden-keeper/status' }
   ];
@@ -210,25 +200,7 @@ function buildWeatherPayload(raw){
   return { events, refreshedAt: Date.now() };
 }
 
-// Build a flat pet map by name
-function buildPetMap(){
-  const map = new Map();
-  for(const mod of petCollections){
-    for(const key of Object.keys(mod)){
-      const group = mod[key];
-      if(group && typeof group === 'object'){
-        for(const pk of Object.keys(group)){
-          const pet = group[pk];
-          if(pet && typeof pet.name === 'string'){
-            map.set(pet.name.toLowerCase(), pet);
-          }
-        }
-      }
-    }
-  }
-  return map;
-}
-const PET_MAP = buildPetMap();
+
 
 // ---------------------------
 // Dashboard helpers (use existing MySQL tables)
@@ -708,179 +680,7 @@ router.get('/garden-keeper', (req,res)=>{
   res.send(baseLayout({ title:'Garden Keeper • Overview', description:'Dashboard for the Garden Keeper Discord bot', body, extraHead: EXTRA_HEAD, image:'/public/og-gardenkeeper.png' }));
 });
 
-// Pets page
-router.get('/garden-keeper/pets', (req,res)=>{
-  const petNames = Array.from(PET_MAP.keys()).sort();
-  const petMeta = petNames.map(n=>{ const p=PET_MAP.get(n)||{}; return { key:n, name:p.name||n, type:p.type||'unknown', rarity:p.rarity||'Unknown', icon:p.icon||null, source:p.source||'' }; });
-  const body = `${nav(req,'pets')}
-  <section class="gk-hero compact"><div class="gk-hero-text"><h1>Pet Calculator</h1><p class="lead">Estimate abilities by pet, weight, and modifier.</p></div></section>
-  <div class="gk-tracking-wrap">
-    <section class="gk-tracking-sub" id="petsSection">
-      <div class="gk-card gk-pet-head"><div class="gk-card-body">
-        <div class="pet-head-inner">
-          <div class="pet-icon-wrap"><img id="petIcon" class="pet-icon" alt="pet" loading="lazy" /></div>
-          <div class="pet-head-text">
-            <h2 id="petTitle" class="pet-title">Select a pet</h2>
-            <div class="pet-tags"><span id="petRarity" class="badge">Rarity</span><span id="petType" class="tag">Type</span></div>
-          </div>
-        </div>
-      </div></div>
-      <div class="gk-grid gk-pet-grid">
-        <div class="gk-col">
-          <div class="gk-card"><div class="gk-card-head"><h3>Inputs</h3></div><div class="gk-card-body">
-            <div class="gk-form-grid">
-              <div class="gk-field" id="petFilterField">
-                <label for="petSearch">Search</label>
-                <input id="petSearch" type="search" placeholder="Type to filter pets" autocomplete="off" />
-                <small class="muted">Filter the list, then pick a pet.</small>
-              </div>
-              <div class="gk-field">
-                <div class="gk-field-head">
-                  <label for="petName">Pet</label>
-                  <button type="button" class="gk-btn small outline" id="togglePetInput">Use Search</button>
-                </div>
-                <select id="petName">${petNames.map(n=>`<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('')}</select>
-              </div>
-            </div>
 
-            <div class="gk-form-grid">
-              <div class="gk-field">
-                <label for="petWeight">Weight (kg)</label>
-                <div class="gk-input-row">
-                  <input id="petWeight" type="number" value="50" min="0" max="500" step="1" />
-                  <input id="petWeightSlider" type="range" value="50" min="0" max="500" step="1" />
-                </div>
-              </div>
-              <div class="gk-field">
-                <label for="petAge">Age (days)</label>
-                <div class="gk-input-row">
-                  <input id="petAge" type="number" value="0" min="0" max="100" step="1" />
-                  <input id="petAgeSlider" type="range" value="0" min="0" max="100" step="1" />
-                </div>
-              </div>
-              <div class="gk-field">
-                <label for="petModifier">Modifier</label>
-                <select id="petModifier">
-                  <option value="none">None</option>
-                  <option value="bronze">Bronze</option>
-                  <option value="silver">Silver</option>
-                  <option value="gold">Gold</option>
-                  <option value="golden">Golden</option>
-                  <option value="rainbow">Rainbow</option>
-                  <option value="shocked">Shocked</option>
-                  <option value="frozen">Frozen</option>
-                  <option value="windy">Windy</option>
-                  <option value="ironskin">IronSkin</option>
-                  <option value="radiant">Radiant</option>
-                  <option value="ascended">Ascended</option>
-                  <option value="tranquil">Tranquil</option>
-                  <option value="corrupted">Corrupted</option>
-                </select>
-              </div>
-            </div>
-
-            <datalist id="petsList">${petNames.map(n=>`<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>
-            <hr />
-
-            <div class="gk-form-grid" id="compareGrid">
-              <div class="gk-field" id="pet2FilterField">
-                <label for="pet2Search">Search 2</label>
-                <input id="pet2Search" type="search" placeholder="Filter compare pet" autocomplete="off" />
-                <small class="muted">Optional compare against a second pet.</small>
-              </div>
-              <div class="gk-field">
-                <div class="gk-field-head">
-                  <label for="pet2Name">Compare With</label>
-                  <button type="button" class="gk-btn small outline" id="togglePet2Input">Use Search</button>
-                </div>
-                <select id="pet2Name"><option value="">(none)</option>${petNames.map(n=>`<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('')}</select>
-                <input id="pet2NameText" class="gk-hidden" type="text" list="petsList" placeholder="Type pet name" autocomplete="off" />
-              </div>
-              <div class="gk-field">
-                <label for="pet2Weight">Weight 2 (kg)</label>
-                <div class="gk-input-row">
-                  <input id="pet2Weight" type="number" value="50" min="0" max="500" step="1" />
-                  <input id="pet2WeightSlider" type="range" value="50" min="0" max="500" step="1" />
-                </div>
-              </div>
-              <div class="gk-field">
-                <label for="pet2Age">Age 2 (days)</label>
-                <div class="gk-input-row">
-                  <input id="pet2Age" type="number" value="0" min="0" max="100" step="1" />
-                  <input id="pet2AgeSlider" type="range" value="0" min="0" max="100" step="1" />
-                </div>
-              </div>
-              <div class="gk-field">
-                <label for="pet2Modifier">Modifier 2</label>
-                <select id="pet2Modifier">
-                  <option value="">(same)</option>
-                  <option value="none">None</option>
-                  <option value="bronze">Bronze</option>
-                  <option value="silver">Silver</option>
-                  <option value="gold">Gold</option>
-                  <option value="golden">Golden</option>
-                  <option value="rainbow">Rainbow</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="gk-actions compact">
-              <button class="gk-btn" id="petsCalcBtn">Calculate</button>
-              <button class="gk-btn outline" id="petsResetBtn">Reset</button>
-            </div>
-          </div></div>
-        </div>
-        <div class="gk-col">
-          <div class="gk-card"><div class="gk-card-head"><h3>Result</h3><div class="gk-card-tools"><button class="gk-btn small outline" id="copyResult">Copy</button></div></div><div class="gk-card-body"><div class="gk-pre rich" id="petsResult">Pick a pet and click Calculate.</div></div></div>
-          <div class="gk-card"><div class="gk-card-head"><h3>Compare Result</h3><div class="gk-card-tools"><button class="gk-btn small outline" id="copyResult2">Copy</button></div></div><div class="gk-card-body"><div class="gk-pre rich" id="petsResult2">Optional second pet comparison.</div></div></div>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script src="/public/gk-pets.js" defer></script>`;
-  res.send(baseLayout({ title:'Garden Keeper • Pets', description:'Pet calculation sandbox', body, extraHead: EXTRA_HEAD }));
-});
-
-// Pets API
-router.get('/garden-keeper/api/pets', (req,res)=>{
-  const list = Array.from(PET_MAP.values()).map(p=>({ name:p.name, type:p.type, rarity:p.rarity }));
-  res.json({ pets:list });
-});
-router.post('/garden-keeper/api/pets/calc', async (req,res)=>{
-  try {
-  console.log('[pets/calc] incoming', { ua: req.headers['user-agent'], ip: req.ip });
-    const { pet, weight, age=0, modifier='none', pet2, weight2, age2=0, modifier2 } = req.body || {};
-    const name1 = (pet||'').toLowerCase();
-    const p1 = PET_MAP.get(name1);
-    if(!p1) return res.status(400).json({ error: 'Unknown pet' });
-    const w1 = Number(weight);
-    if(!Utils.isValidWeight(w1)) return res.status(400).json({ error: 'Invalid weight' });
-    const a1 = Math.max(0, Math.min(100, Number(age)||0));
-    // Extended calculate signature support: calculate(weight, modifier, opts?)
-    let result;
-    try {
-      result = p1.calculate.length >= 3 ? p1.calculate(w1, modifier||'none', { age:a1 }) : p1.calculate(w1, modifier||'none');
-    } catch(e){ result = p1.calculate(w1, modifier||'none'); }
-    let result2 = undefined;
-    if(pet2){
-      const name2 = String(pet2).toLowerCase();
-      const p2 = PET_MAP.get(name2);
-      if(p2){
-        const w2 = Number(weight2||w1);
-        if(Utils.isValidWeight(w2)){
-          const a2 = Math.max(0, Math.min(100, Number(age2)||0));
-          try {
-            result2 = p2.calculate.length >= 3 ? p2.calculate(w2, (modifier2||modifier||'none'), { age:a2 }) : p2.calculate(w2, (modifier2||modifier||'none'));
-          } catch(e){ result2 = p2.calculate(w2, (modifier2||modifier||'none')); }
-        }
-      }
-    }
-    res.json({ result, result2 });
-  } catch(e){
-    console.error('pets calc error:', e);
-    res.status(500).json({ error: 'Calculation failed' });
-  }
-});
 
 // Public stock/weather endpoints for the tracking page client script
 router.get('/garden-keeper/api/stock', async (req,res)=>{
